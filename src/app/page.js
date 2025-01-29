@@ -6,6 +6,7 @@ import QuizBasic from '../components/QuizBasic';
 import QuizMultipleChoice from '../components/QuizMultipleChoice';
 import { useVocabulary } from '../hooks/useVocabulary';
 import { useQuiz } from '../hooks/useQuiz';
+import BackHandler from '../components/BackHandler';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('vocabulary');
@@ -47,9 +48,10 @@ export default function Home() {
     }
   };
 
-  return (
-    <main className="flex min-h-screen flex-col items-center p-8">
-      <h1 className="text-3xl font-bold mb-8">초등 영어 단어장 📚</h1>
+return (
+  <main className="flex min-h-screen flex-col items-center p-8">
+    <BackHandler activeTab={activeTab} setActiveTab={setActiveTab} />
+    <h1 className="text-3xl font-bold mb-8">초등 영어 단어장 📚</h1>
 
       {/* 탭 메뉴 */}
       <div className="w-full max-w-2xl mb-8">
