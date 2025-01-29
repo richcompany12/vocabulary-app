@@ -33,46 +33,10 @@ const VocabularyList = ({ words, onToggleFavorite, onToggleMeaning, showMeaning 
     }
   };
 
-return (
-  <div className="w-full max-w-2xl">
-    {/* 단어 목록 */}
-    <div className="space-y-4 mb-4">
-      {currentWords.map((word) => (
-        // 기존 단어 카드 코드...
-      ))}
-    </div>
-
-    {/* 페이지 네비게이션 */}
-    <div className="flex justify-center items-center gap-4 mt-6">
-      <button 
-        onClick={prevPage}
-        disabled={currentPage === 0}
-        className={`px-4 py-2 rounded-lg ${
-          currentPage === 0 
-            ? 'bg-gray-200 text-gray-400' 
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
-      >
-        이전 페이지
-      </button>
-      <span className="text-sm text-gray-600">
-        {currentPage * wordsPerPage + 1} - {Math.min((currentPage + 1) * wordsPerPage, words.length)} / {words.length}
-      </span>
-      <button 
-        onClick={nextPage}
-        disabled={(currentPage + 1) * wordsPerPage >= words.length}
-        className={`px-4 py-2 rounded-lg ${
-          (currentPage + 1) * wordsPerPage >= words.length 
-            ? 'bg-gray-200 text-gray-400' 
-            : 'bg-blue-500 text-white hover:bg-blue-600'
-        }`}
-      >
-        다음 페이지
-      </button>
-    </div>
-  </div>
-);
-      <div className="space-y-4">
+  return (
+    <div className="w-full max-w-2xl">
+      {/* 단어 목록 */}
+      <div className="space-y-4 mb-4">
         {currentWords.map((word) => (
           <div key={word.id} className="border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex justify-between items-center">
@@ -108,6 +72,35 @@ return (
             <span className="text-xs text-gray-500 mt-1">{word.category}</span>
           </div>
         ))}
+      </div>
+
+      {/* 페이지 네비게이션 */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button 
+          onClick={prevPage}
+          disabled={currentPage === 0}
+          className={`px-4 py-2 rounded-lg ${
+            currentPage === 0 
+              ? 'bg-gray-200 text-gray-400' 
+              : 'bg-blue-500 text-white hover:bg-blue-600'
+          }`}
+        >
+          이전 페이지
+        </button>
+        <span className="text-sm text-gray-600">
+          {currentPage * wordsPerPage + 1} - {Math.min((currentPage + 1) * wordsPerPage, words.length)} / {words.length}
+        </span>
+        <button 
+          onClick={nextPage}
+          disabled={(currentPage + 1) * wordsPerPage >= words.length}
+          className={`px-4 py-2 rounded-lg ${
+            (currentPage + 1) * wordsPerPage >= words.length 
+              ? 'bg-gray-200 text-gray-400' 
+              : 'bg-blue-500 text-white hover:bg-blue-600'
+          }`}
+        >
+          다음 페이지
+        </button>
       </div>
     </div>
   );
