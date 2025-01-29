@@ -50,39 +50,46 @@ export default function Home() {
 
 return (
   <main className="flex min-h-screen flex-col items-center p-8">
-    <BackHandler activeTab={activeTab} setActiveTab={setActiveTab} />
+    <BackHandler 
+  activeTab={activeTab} 
+  setActiveTab={setActiveTab} 
+  resetQuizState={resetQuizState}  // 추가
+/>
     <h1 className="text-3xl font-bold mb-8">초등 영어 단어장 📚</h1>
 
       {/* 탭 메뉴 */}
-      <div className="w-full max-w-2xl mb-8">
-        <div className="flex gap-4 border-b">
-          <button
-            onClick={() => setActiveTab('vocabulary')}
-            className={`py-2 px-4 ${activeTab === 'vocabulary' ? 'border-b-2 border-blue-500' : ''}`}
-          >
-            <Book className="w-5 h-5 inline-block mr-2" />
-            단어장
-          </button>
-          <button
-  	onClick={() => {
-  	  setActiveTab('quiz');
- 	   setQuizMode(null);  // 퀴즈 모드 초기화
- 	   setIsQuizStarted(false);  // 퀴즈 시작 상태 초기화
-	  }}
- 	 className={`py-2 px-4 ${activeTab === 'quiz' ? 'border-b-2 border-blue-500' : ''}`}
-	>
- 	 <PenTool className="w-5 h-5 inline-block mr-2" />
- 	 학습하기
-          </button>
-          <button
-            onClick={() => setActiveTab('wrongnotes')}
-            className={`py-2 px-4 ${activeTab === 'wrongnotes' ? 'border-b-2 border-blue-500' : ''}`}
-          >
-            <XCircle className="w-5 h-5 inline-block mr-2" />
-            오답 노트 ({wrongAnswers.length})
-          </button>
-        </div>
-      </div>
+      <div className="flex gap-4 border-b">
+  <button
+    onClick={() => {
+      setActiveTab('vocabulary');
+      resetQuizState();  // 퀴즈 상태 초기화
+    }}
+    className={`py-2 px-4 ${activeTab === 'vocabulary' ? 'border-b-2 border-blue-500' : ''}`}
+  >
+    <Book className="w-5 h-5 inline-block mr-2" />
+    단어장
+  </button>
+  <button
+    onClick={() => {
+      setActiveTab('quiz');
+      resetQuizState();  // 퀴즈 상태 초기화
+    }}
+    className={`py-2 px-4 ${activeTab === 'quiz' ? 'border-b-2 border-blue-500' : ''}`}
+  >
+    <PenTool className="w-5 h-5 inline-block mr-2" />
+    학습하기
+  </button>
+  <button
+    onClick={() => {
+      setActiveTab('wrongnotes');
+      resetQuizState();  // 퀴즈 상태 초기화
+    }}
+    className={`py-2 px-4 ${activeTab === 'wrongnotes' ? 'border-b-2 border-blue-500' : ''}`}
+  >
+    <XCircle className="w-5 h-5 inline-block mr-2" />
+    오답 노트 ({wrongAnswers.length})
+  </button>
+</div>
 
       {/* 단어장 모드 */}
       {activeTab === 'vocabulary' && (

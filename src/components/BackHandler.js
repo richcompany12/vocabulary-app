@@ -1,20 +1,19 @@
 'use client';
 import { useEffect } from 'react';
 
-const BackHandler = ({ activeTab, setActiveTab }) => {
+const BackHandler = ({ activeTab, setActiveTab, resetQuizState }) => {  // resetQuizState 추가
   useEffect(() => {
     const handleBackButton = (event) => {
       event.preventDefault();
       
       if (activeTab === 'vocabulary') {
-        // 홈 화면에서 뒤로가기
         if (window.confirm('어플을 종료하시겠습니까?')) {
           window.close();
         }
       } else {
-        // 다른 화면에서 뒤로가기
         if (window.confirm('현재 단계를 종료하고 홈화면으로 이동하시겠습니까?')) {
           setActiveTab('vocabulary');
+          resetQuizState();  // 퀴즈 상태 초기화
         }
       }
     };
@@ -25,7 +24,7 @@ const BackHandler = ({ activeTab, setActiveTab }) => {
     return () => {
       window.removeEventListener('popstate', handleBackButton);
     };
-  }, [activeTab, setActiveTab]);
+  }, [activeTab, setActiveTab, resetQuizState]);
 
   return null;
 };

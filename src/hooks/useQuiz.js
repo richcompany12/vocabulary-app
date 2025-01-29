@@ -2,7 +2,9 @@
 import { useState, useEffect } from 'react';
 
 export const useQuiz = () => {
-  // 오답 노트 상태 관리
+  const [quizMode, setQuizMode] = useState(null);  // null로 초기화
+  const [quizWords, setQuizWords] = useState([]);
+  const [isQuizStarted, setIsQuizStarted] = useState(false);
   const [wrongAnswers, setWrongAnswers] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('wrongAnswers');
@@ -11,15 +13,12 @@ export const useQuiz = () => {
     return [];
   });
 
-  // 퀴즈 상태
-  const [quizMode, setQuizMode] = useState('basic'); // 'basic', 'multiple-eng', 'multiple-kor', 'writing'
-  const [quizWords, setQuizWords] = useState([]);
-  const [isQuizStarted, setIsQuizStarted] = useState(false);
-
-  // 오답 노트 저장
-  useEffect(() => {
-    localStorage.setItem('wrongAnswers', JSON.stringify(wrongAnswers));
-  }, [wrongAnswers]);
+  // 탭 변경 시 퀴즈 상태 초기화 함수
+  const resetQuizState = () => {
+    setQuizMode(null);
+    setQuizWords([]);
+    setIsQuizStarted(false);
+  };
 
   // 퀴즈 시작
   const startQuiz = (words, count = 10) => {
@@ -32,8 +31,7 @@ export const useQuiz = () => {
 
   // 퀴즈 종료
   const endQuiz = (result) => {
-    if (result.wrongAnswers.length > 0) {
-      // 중복 제거하면서 오답 추가
+    if (result?.wrongAnswers?.length > 0) {
       const newWrongAnswers = [...wrongAnswers];
       result.wrongAnswers.forEach(wrongWord => {
         if (!newWrongAnswers.find(w => w.id === wrongWord.id)) {
@@ -42,13 +40,7 @@ export const useQuiz = () => {
       });
       setWrongAnswers(newWrongAnswers);
     }
-    setIsQuizStarted(false);
-    setQuizWords([]);
-  };
-
-  // 오답 노트에서 단어 제거
-  const removeFromWrongAnswers = (id) => {
-    setWrongAnswers(wrongAnswers.filter(word => word.id !== id));
+    resetQuizState();  // 퀴즈 종료 시 상태 초기화
   };
 
   return {
@@ -59,6 +51,6 @@ export const useQuiz = () => {
     wrongAnswers,
     startQuiz,
     endQuiz,
-    removeFromWrongAnswers,
+    resetQuizState,  // 새로 추가된 초기화 함수 export
   };
 };
