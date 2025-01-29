@@ -64,11 +64,15 @@ return (
             단어장
           </button>
           <button
-            onClick={() => setActiveTab('quiz')}
-            className={`py-2 px-4 ${activeTab === 'quiz' ? 'border-b-2 border-blue-500' : ''}`}
-          >
-            <PenTool className="w-5 h-5 inline-block mr-2" />
-            학습하기
+  	onClick={() => {
+  	  setActiveTab('quiz');
+ 	   setQuizMode(null);  // 퀴즈 모드 초기화
+ 	   setIsQuizStarted(false);  // 퀴즈 시작 상태 초기화
+	  }}
+ 	 className={`py-2 px-4 ${activeTab === 'quiz' ? 'border-b-2 border-blue-500' : ''}`}
+	>
+ 	 <PenTool className="w-5 h-5 inline-block mr-2" />
+ 	 학습하기
           </button>
           <button
             onClick={() => setActiveTab('wrongnotes')}

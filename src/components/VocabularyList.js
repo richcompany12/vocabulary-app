@@ -3,15 +3,23 @@ import React, { useState } from 'react';
 import { Star, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const VocabularyList = ({ words, onToggleFavorite, onToggleMeaning, showMeaning }) => {
-  const [currentPage, setCurrentPage] = useState(0);
+  // 랜덤 시작 페이지를 위한 초기값 설정
+  const [currentPage, setCurrentPage] = useState(() => {
+    const totalPages = Math.ceil(words.length / 5);
+    return Math.floor(Math.random() * totalPages);
+  });
   const wordsPerPage = 5;
 
+  // 필터링된 단어 목록을 랜덤으로 섞기
+  const shuffledWords = React.useMemo(() => {
+    return [...words].sort(() => Math.random() - 0.5);
+  }, [words]);
+
   // 현재 페이지의 단어들만 선택
-  const currentWords = words.slice(
+  const currentWords = shuffledWords.slice(
     currentPage * wordsPerPage,
     (currentPage + 1) * wordsPerPage
   );
-
   // 발음 재생
   const playPronunciation = (word) => {
     const speech = new SpeechSynthesisUtterance(word);
