@@ -1,28 +1,26 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Star, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const VocabularyList = ({ words, onToggleFavorite, onToggleMeaning, showMeaning }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const wordsPerPage = 5;
-  const [randomizedWords, setRandomizedWords] = useState([]);
 
-  // 필터링된 words가 변경될 때마다 페이지를 리셋하고 새로운 랜덤 순서 생성
-  useEffect(() => {
-    setCurrentPage(0);  // 페이지 리셋
-    const newRandomWords = [...words];
-    // 카테고리나 검색어 변경 시에는 랜덤화하지 않음
-    if (words.length === newRandomWords.length) {
-      newRandomWords.sort(() => Math.random() - 0.5);
-    }
-    setRandomizedWords(newRandomWords);
-  }, [words]);
+  // 단어 목록을 카테고리나 검색이 변경될 때만 랜덤화
+  const shuffledWords = useMemo(() => {
+    return [...words].sort(() => Math.random() - 0.5);
+  }, [words]); // words가 변경될 때만 랜덤화
 
   // 현재 페이지의 단어들
-  const currentWords = randomizedWords.slice(
+  const currentWords = shuffledWords.slice(
     currentPage * wordsPerPage,
     (currentPage + 1) * wordsPerPage
   );
+
+  // words가 변경될 때 페이지 리셋
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [words]);
 
   // 발음 재생
   const playPronunciation = (word) => {
@@ -40,18 +38,10 @@ const VocabularyList = ({ words, onToggleFavorite, onToggleMeaning, showMeaning 
 
   // 다음 페이지로 이동
   const nextPage = () => {
-    if ((currentPage + 1) * wordsPerPage < randomizedWords.length) {
+    if ((currentPage + 1) * wordsPerPage < shuffledWords.length) {
       setCurrentPage(currentPage + 1);
     }
   };
-
-  // 페이지 번호가 전체 페이지 수를 초과하지 않도록
-  useEffect(() => {
-    const maxPage = Math.ceil(randomizedWords.length / wordsPerPage) - 1;
-    if (currentPage > maxPage) {
-      setCurrentPage(Math.max(0, maxPage));
-    }
-  }, [randomizedWords.length, currentPage]);
 
   return (
     <div className="w-full max-w-2xl">
@@ -95,7 +85,7 @@ const VocabularyList = ({ words, onToggleFavorite, onToggleMeaning, showMeaning 
       </div>
 
       {/* 페이지 네비게이션 */}
-      {randomizedWords.length > 0 && (
+      {shuffledWords.length > 0 && (
         <div className="flex justify-center items-center gap-4 mt-6">
           <button 
             onClick={prevPage}
@@ -109,13 +99,13 @@ const VocabularyList = ({ words, onToggleFavorite, onToggleMeaning, showMeaning 
             이전 페이지
           </button>
           <span className="text-sm text-gray-600">
-            {randomizedWords.length > 0 ? `${currentPage * wordsPerPage + 1} - ${Math.min((currentPage + 1) * wordsPerPage, randomizedWords.length)} / ${randomizedWords.length}` : '0 - 0 / 0'}
+            {currentPage * wordsPerPage + 1} - {Math.min((currentPage + 1) * wordsPerPage, shuffledWords.length)} / {shuffledWords.length}
           </span>
           <button 
             onClick={nextPage}
-            disabled={(currentPage + 1) * wordsPerPage >= randomizedWords.length}
+            disabled={(currentPage + 1) * wordsPerPage >= shuffledWords.length}
             className={`px-4 py-2 rounded-lg ${
-              (currentPage + 1) * wordsPerPage >= randomizedWords.length 
+              (currentPage + 1) * wordsPerPage >= shuffledWords.length 
                 ? 'bg-gray-200 text-gray-400' 
                 : 'bg-blue-500 text-white hover:bg-blue-600'
             }`}
