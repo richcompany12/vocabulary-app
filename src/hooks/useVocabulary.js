@@ -4,13 +4,15 @@ import { vocabData } from '../data/vocab-data';
 
 export const useVocabulary = () => {
   // 단어장 데이터 상태
-  const [words, setWords] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('vocabulary');
-      return saved ? JSON.parse(saved) : vocabData;
-    }
-    return vocabData;
-  });
+const [words, setWords] = useState(() => {
+  if (typeof window !== 'undefined') {
+    const saved = localStorage.getItem('vocabulary');
+    const initialWords = saved ? JSON.parse(saved) : vocabData;
+    // 초기 로드 시에만 랜덤으로 섞기
+    return [...initialWords].sort(() => Math.random() - 0.5);
+  }
+  return [...vocabData].sort(() => Math.random() - 0.5);
+});
 
   // 단어 뜻 보이기/숨기기 상태
   const [showMeaning, setShowMeaning] = useState({});
